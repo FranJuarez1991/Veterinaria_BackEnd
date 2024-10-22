@@ -55,32 +55,39 @@ const actualizarUnProducto = async(req, res) => {
 
   };
 
-  const agregarUnProductoAlCarrito = async (req, res)=>{
-    const result = await serviciosProductos.borrarProductoCarrito(req.idUsuario, req.params.idProducto);
-    
-     if (result.statusCode === 200) {
-       res.status(200).json({ msg: result.msg });
-     } else if (result.statusCode === 400) {
-       res.status(400).json({ msg: result.msg });
-     } else {
-       res.status(500).json({ msg: "Error al eliminar un producto del Carrito" });
-     }
+  const agregarUnProductoAlCarrito = async (req, res) => {
+    const result = await serviciosProductos.cargarProductoCarrito(
+      req.idUsuario,
+      req.params.idProducto
+    );
+
+    if (result.statusCode === 200) {
+      res.status(200).json({ msg: result.msg });
+    } else if (result.statusCode === 400) {
+      res.status(400).json({ msg: result.msg });
+    } else {
+      res
+        .status(500)
+        .json({ msg: "Error al eliminar un producto del Carrito" });
+    }
   };
 
-   const borrarUnProductodelCarrito = async (req, res) => {
-     const result = await serviciosProductos.cargarProductoCarrito(
-       req.idUsuario,
-       req.params.idProducto
-     );
+  const borrarUnProductodelCarrito = async (req, res) => {
+    const result = await serviciosProductos.borrarProductoCarrito(
+      req.idUsuario,
+      req.params.idProducto
+    );
 
-     if (result.statusCode === 200) {
-       res.status(200).json({ msg: result.msg });
-     } else if (result.statusCode === 400) {
-       res.status(400).json({ msg: result.msg });
-     } else {
-       res.status(500).json({ msg: "Error al eliminar un producto del Carrito" });
-     }
-   };
+    if (result.statusCode === 200) {
+      res.status(200).json({ msg: result.msg });
+    } else if (result.statusCode === 400) {
+      res.status(400).json({ msg: result.msg });
+    } else {
+      res
+        .status(500)
+        .json({ msg: "Error al eliminar un producto del Carrito" });
+    }
+  };
 
   const agregarUnProductoAFavorito = async (req, res) => {
     const result = await serviciosProductos.cargarProductoFavorito(
@@ -95,22 +102,23 @@ const actualizarUnProducto = async(req, res) => {
     } else {
       res.status(500).json({ msg: "Error al cargar un producto a Favorito" });
     }
-
   };
 
-     const borrarUnProductodeFavorito = async (req, res) => {
-   const result = await serviciosProductos.cargarProductoFavorito(
-     req.idUsuario,
-     req.params.idProducto
-   );
-   if (result.statusCode === 200) {
-     res.status(200).json({ msg: result.msg });
-   } else if (result.statusCode === 400) {
-     res.status(400).json({ msg: result.msg });
-   } else {
-     res.status(500).json({ msg: "Error al eliminar un producto de Favorito" });
-   }
- };
+  const borrarUnProductodeFavorito = async (req, res) => {
+    const result = await serviciosProductos.borrarProductoFavorito(
+      req.idUsuario,
+      req.params.idProducto
+    );
+    if (result.statusCode === 200) {
+      res.status(200).json({ msg: result.msg });
+    } else if (result.statusCode === 400) {
+      res.status(400).json({ msg: result.msg });
+    } else {
+      res
+        .status(500)
+        .json({ msg: "Error al eliminar un producto de Favorito" });
+    }
+  };
 
   
 module.exports = {

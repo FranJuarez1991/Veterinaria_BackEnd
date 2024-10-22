@@ -34,12 +34,12 @@ const auth = require("../middlewares/auth");
   router.put("/:idProducto", actualizarUnProducto);
   /*DELETE- Eliminar un producto */
   router.delete("/:idProducto", eliminarUnProducto);
-  router.post(
+  router.delete(
     "/borrarProductoCarrito/:idProducto",
     auth("user"),
     borrarUnProductodelCarrito
   );
-  router.post(
+  router.delete(
     "/borrarProductoFavorito/:idProducto",
     auth("user"),
     borrarUnProductodeFavorito

@@ -152,7 +152,7 @@ const cargarProductoFavorito = async (idUsuario, idProducto) => {
 
 const borrarProductoFavorito = async (idUsuario, idProducto) => {
   const usuario = await UserModel.findById(idUsuario);
-  const favorito = await FavModelModel.findOne({ _id: usuario.idFavorito });
+  const favorito = await FavModel.findOne({ _id: usuario.idFavorito });
   const posicionProducto = favorito.productos.findIndex(
     (prod) => prod._id.toString() === idProducto.toString()
   );
