@@ -119,16 +119,56 @@ const actualizarUnProducto = async(req, res) => {
         .json({ msg: "Error al eliminar un producto de Favorito" });
     }
   };
+    const obtenerProductosCarrito = async (req, res) => {
+      try {
+        const result =
+          await serviciosProductos.obtenerProductosDelCarritoUsuario(
+            req.idUsuario
+          );
+        res.status(result.statusCode).json(result);
+      } catch (error) {
+        res.status(500).json({ msg: "Error al obtener productos del Carrito" });
+      }
+    };
 
-  
-module.exports = {
-  obtenerTodosLosProductos,
-  obtenerUnProducto,
-  crearUnProducto,
-  actualizarUnProducto,
-  eliminarUnProducto,
-  agregarUnProductoAlCarrito,
-  agregarUnProductoAFavorito,
-  borrarUnProductodelCarrito,
-  borrarUnProductodeFavorito
-};
+    const obtenerProductosFavoritos = async (req, res) => {
+      try {
+        const result =
+          await serviciosProductos.obtenerProductosDeFavoritosUsuario(
+            req.idUsuario
+          );
+        res.status(result.statusCode).json(result);
+      } catch (error) {
+        res
+          .status(500)
+          .json({ msg: "Error al obtener productos de Favoritos" });
+      }
+    };
+
+    const agregarImagenProducto = async (req, res) => {
+      const result = await serviciosProductos.agregarImagen(
+        req.params.idProducto,
+        req.file
+      );
+
+      if (result.statusCode === 200) {
+        res.status(200).json({ msg: result.msg });
+      } else {
+        res.status(500).json({ msg: "Error al agregar la imagen al producto" });
+      }
+    };
+
+    module.exports = {
+      obtenerTodosLosProductos,
+      obtenerUnProducto,
+      crearUnProducto,
+      actualizarUnProducto,
+      eliminarUnProducto,
+      agregarUnProductoAlCarrito,
+      agregarUnProductoAFavorito,
+      borrarUnProductodelCarrito,
+      borrarUnProductodeFavorito,
+      obtenerProductosCarrito,
+      obtenerProductosFavoritos,
+      agregarImagenProducto,
+    };

@@ -5,31 +5,35 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true /*sacar espacios vacios en parte adelante y atras */,
-    match: /^[a-zA-Z\s]+$/, // Solo letras y espacios
+    // match: /^[a-zA-Z\s]+$/, // Solo letras y espacios
   },
   precio: {
     type: Number,
     require: true,
-    validate: {
+    /* validate: {
       validator: function (v) {
         return v > 0;
       },
       message: (props) =>
         `${props.value} no es un precio válido! El precio debe ser positivo.`,
-    },
+    },*/
   },
   descripcion: {
     type: String,
     required: true,
     trim: true,
-    minlength: 10, // Descripción mínima de 10 caracteres
-    maxlength: 500, // Descripción máxima de 500 caracteres
+    // minlength: 10, // Descripción mínima de 10 caracteres
+    // maxlength: 500, // Descripción máxima de 500 caracteres
   },
   imagen: {
     type: String,
     default: "",
     trim: true,
   } /*completar y agregar mas validacion de moong como exp regular etc */,
+  bloqueado: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const ProductModel = mongoose.model('product', ProductSchema);

@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const serviciosUsuarios = require("../services/usuarios.services");
 
 const obtenerTodosLosUsuarios = async (req, res) => {
@@ -20,6 +21,12 @@ const obtenerUnUsuario = async (req, res) => {
 };
 
 const crearUnUsuario = async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ msg: errors.array() });
+  }
+
   const result = await serviciosUsuarios.crearUsuario(req.body);
   if (result.statusCode === 201) {
     res.status(201).json({ msg: result.msg });
@@ -50,7 +57,7 @@ const eliminarUnUsuario = async (req, res) => {
   }
 };
 
-const inicioDeSesionUsuario = async (req,res) => {
+const inicioDeSesionUsuario = async (req, res) => {
   const result = await serviciosUsuarios.iniciarSesion(req.body);
 
   if (result.statusCode === 200) {
