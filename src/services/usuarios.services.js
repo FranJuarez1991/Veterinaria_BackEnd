@@ -15,63 +15,63 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const FavModel = require("../models/favoritos.schema");
 const CartModel = require("../models/carrito.schema");
-
+const { darBienvenidaAlUsuario } = require("../helpers/mensajes.mails");
 
 const obtenerUsuarios = async () => {
-    //const usuarios = await UserModel.find({}, "-contrasenia");
-    const usuarios = await UserModel.find();
+  //const usuarios = await UserModel.find({}, "-contrasenia");
+  const usuarios = await UserModel.find();
 
-    return {
-        usuarios,
-        statusCode: 200,
-    }
-
+  return {
+    usuarios,
+    statusCode: 200,
+  };
 };
-const obtenerUsuario = async (idUsuario) =>{
-    const usuario = await UserModel.findOne({_id: idUsuario});
-   /* const usuario = usuarios.find((user) => user.id === Number(idUsuario));*/
-    return {
-      usuario,
-      statusCode: 200,
-    };
-
+const obtenerUsuario = async (idUsuario) => {
+  const usuario = await UserModel.findOne({ _id: idUsuario });
+  /* const usuario = usuarios.find((user) => user.id === Number(idUsuario));*/
+  return {
+    usuario,
+    statusCode: 200,
+  };
 };
 const crearUsuario = async (body) => {
-        const usuarioExiste = await UserModel.findOne({
-          nombreUsuario: body.nombreUsuario,
-        });
-        
-if (usuarioExiste){
+  const usuarioExiste = await UserModel.findOne({
+    nombreUsuario: body.nombreUsuario,
+  });
+
+  if (usuarioExiste) {
     return {
       msg: "usuario No Disponible",
       StatusCode: 400,
     };
-}
+  }
 
-if (
-  (body?.rol && body?.rol !== "admin") ||
-  (body?.rol &&  body?.rol !== "user")
-) {
-  return {
-    msg: "Rol Incorrecto. Solo se Puede elegir User/Admin",
-    StatusCode: 400,
-  };
-}
-    const usuario = new UserModel(body);
-    const carrito = new CartModel({idUsuario: usuario._id});
-    const favorito = new FavModel({ idUsuario: usuario._id });
+  if (
+    (body?.rol && body?.rol !== "admin") ||
+    (body?.rol && body?.rol !== "user")
+  ) {
+    return {
+      msg: "Rol Incorrecto. Solo se Puede elegir User/Admin",
+      StatusCode: 400,
+    };
+  }
+  const usuario = new UserModel(body);
+  const carrito = new CartModel({ idUsuario: usuario._id });
+  const favorito = new FavModel({ idUsuario: usuario._id });
 
-    usuario.idCarrito = carrito._id;
-    usuario.idFavorito = favorito._id;
-    /*Generar el hasheo de contraseña */
-    const salt = await bcrypt.genSalt(10);
-    usuario.contrasenia = await bcrypt.hash(usuario.contrasenia, salt);
+  usuario.idCarrito = carrito._id;
+  usuario.idFavorito = favorito._id;
+  /*Generar el hasheo de contraseña */
+  const salt = await bcrypt.genSalt(10);
+  usuario.contrasenia = await bcrypt.hash(usuario.contrasenia, salt);
 
-    await carrito.save();
-    await favorito.save();
-    await usuario.save();
+  await carrito.save();
+  await favorito.save();
+  await usuario.save();
 
- /* const nuevoUsuario = {
+  await darBienvenidaAlUsuario(usuario.emailUsuario, usuario.nombreUsuario);
+
+  /* const nuevoUsuario = {
     id: usuarios[usuarios.length - 1]?.id + 1 || 1,
     ...body,
   };
