@@ -13,6 +13,7 @@ const {
   obtenerProductosCarrito,
   obtenerProductosFavoritos,
   agregarImagenProducto,
+  pagarProductos,
 } = require("../controllers/productos.controllers");
 const auth = require("../middlewares/auth");
 const multer = require("../middlewares/multer");
@@ -55,5 +56,7 @@ router.post(
   multer.single("image"),
   agregarImagenProducto
 );
+router.post("/pagarCarritoProductos", pagarProductos); // pagar productos del carrito
+
 
 module.exports = router;

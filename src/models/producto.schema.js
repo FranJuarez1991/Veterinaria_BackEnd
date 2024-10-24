@@ -25,6 +25,14 @@ const ProductSchema = new mongoose.Schema({
     // minlength: 10, // Descripción mínima de 10 caracteres
     // maxlength: 500, // Descripción máxima de 500 caracteres
   },
+  cantidad: {
+    type: Number,
+    required: true,
+    min: [1, "La cantidad debe ser al menos 1"],
+
+    // minlength: 10, // Descripción mínima de 10 caracteres
+    // maxlength: 500, // Descripción máxima de 500 caracteres
+  },
   imagen: {
     type: String,
     default: "",

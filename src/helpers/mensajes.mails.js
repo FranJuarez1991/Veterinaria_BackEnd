@@ -1,23 +1,12 @@
-const cloudinary = require("cloudinary").v2;
 const transporter = require("../helpers/nodemailer.config");
 
 const darBienvenidaAlUsuario = async (emailUsuario, nombreUsuario) => {
-  // Subir imagen a Cloudinary y luego enviar el correo
   try {
-    const result = await cloudinary.uploader.upload("BienvenidaVete.png", {
-      folder: "",
-      resource_type: "image",
-    });
-
-    const imageUrl = result.secure_url; // URL de la imagen en Cloudinary
-
-    // Enviar el correo con la imagen de Cloudinary
     await transporter.sendMail({
       from: `"Veterinaria ODIE👻" <${process.env.GMAIL_USER}>`, // sender address
       to: `${emailUsuario}`, // list of receivers
       subject: "Alta en nuestra Web ✔", // Subject line
       html: `
-        
         <style>
           body {
             font-family: 'Arial', sans-serif;
@@ -66,17 +55,17 @@ const darBienvenidaAlUsuario = async (emailUsuario, nombreUsuario) => {
       </head>
       <body>
         <div class="container">
-        <p>Nos complace darte la bienvenida y cuidar de tu mascota.</p>
-        <div class="image-container">
-        <img src="${imageUrl}" alt="Publicidad Veterinaria">
-        <h1>¡Bienvenido a nuestra Veterinaria ${nombreUsuario}!</h1>
+          <h1>¡Bienvenido a nuestra Veterinaria ${nombreUsuario}!</h1>
+          <p>Nos complace darte la bienvenida y cuidar de tu mascota.</p>
+          <div class="image-container">
+            <img src="https://res.cloudinary.com/dx4gdjmxy/image/upload/v1729709757/dx7dhvmrilyld9f10ube.png" alt="Publicidad Veterinaria">
           </div>
         </div>
       </body>
       `,
     });
   } catch (error) {
-    console.error("Error al subir la imagen o enviar el correo:", error);
+    console.error("Error al enviar el correo:", error);
   }
 };
 

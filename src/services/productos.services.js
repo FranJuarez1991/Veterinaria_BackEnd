@@ -16,6 +16,7 @@ const FavModel = require("../models/favoritos.schema");
 const ProductModel = require("../models/producto.schema");
 const UserModel = require("../models/usuarios.schema");
 const cloudinary = require("../helpers/cloudinary.config");
+const { MercadoPagoConfig, Preference } = require("mercadopago"); //Preferenc compra
 
 const obtenerProductos = async () => {
   const productos = await ProductModel.find();
@@ -216,6 +217,51 @@ const agregarImagen = async (idProducto, file) => {
     statusCode: 200,
   };
 };
+const pagarMercadoPago = async (body) => {
+  const cliente = new MercadoPagoConfig({
+    accessToken: process.env.MP_ACCESS_TOKEN,
+  });
+
+  const preference = new Preference(cliente);
+
+  /*// Mapeamos los productos del body a los items de MercadoPago
+  const items = body.productos.map((producto) => ({
+    title: producto.titulo, // nombre del producto
+    quantity: producto.cantidad, // cantidad del producto
+    unit_price: producto.precio, // precio unitario
+    currency_id: "ARS", // moneda
+  }));*/ //para el caso con el front
+
+  const result = await preference.create({
+    body: {
+      items: [
+        {
+          title: "producto 1",
+          quantity: 1,
+          unit_price: 10000,
+          currency_id: "ARS",
+        },
+        {
+          title: "producto 2",
+          quantity: 1,
+          unit_price: 15000,
+          currency_id: "ARS",
+        },
+      ],
+      back_urls: {
+        success: "frontend/carrito/success",
+        failure: "frontend/carrito/failure",
+        pending: "frontend/carrito/pending",
+      },
+      auto_return: "approved",
+    },
+  });
+
+  return {
+    url: result.init_point,
+    statusCode: 200,
+  };
+};
 
 module.exports = {
   obtenerProductos,
@@ -230,4 +276,5 @@ module.exports = {
   obtenerProductosDelCarritoUsuario,
   obtenerProductosDeFavoritosUsuario,
   agregarImagen,
+  pagarMercadoPago,
 }; 
